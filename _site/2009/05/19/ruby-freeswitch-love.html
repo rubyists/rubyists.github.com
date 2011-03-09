@@ -1,0 +1,37 @@
+<h3 id='ruby_freeswitch_application_programming_interface_esl_alternative'>Ruby Freeswitch Application Programming Interface (ESL Alternative)</h3>
+
+<p><a href='http://code.rubyists.com/fs'>freeswitcher</a> (FSR) is a ruby library for communicating with FreeSWITCH through its event socket interface. FreeSWITCH ruby integration in the core just doesn&#8217;t work with the thread models of either 1.8 or 1.9. On the other hand; FSR, built on ruby eventmachine, can manage more than one instance of FreeSWITCH at a time.</p>
+
+<h4 id='using_the_freeswitcher_gem_2_minute_tutorial'>Using the freeswitcher gem, 2 minute tutorial</h4>
+
+<p>This program will play a smooth wav file and read the DTMF tones entered by the caller. It simply logs the received digits to the info facility (you should see it on stdout)</p>
+<pre class='markdown-html-error' style='border: solid 3px red; background-color: pink'>REXML could not parse this XML/HTML: 
+&lt;typo:code lang=&quot;ruby&quot;&gt;
+require &quot;rubygems&quot;
+require &quot;fsr&quot;
+require &quot;fsr/outbound&quot;
+class GetDigits &lt; FSR::Listener::Outbound
+  def session_initiated
+    exten = session.headers[:caller_caller_id]
+    answer do
+      read(&quot;/path/to/smooth.wav&quot;) do |read_var|
+        FSR::Log.info(&quot;Received #{read_var} from #{exten}&quot;)
+      end
+    end
+  end
+end
+FSR.start_oes! GetDigits, :port =&gt; 8084, :host =&gt; &quot;127.0.0.1&quot;
+&lt;/typo:code&gt;</pre>
+<p>In order to use the above script, add the following in your FreeSWITCH dialplan. You can save it as 00_socket_test.xml in conf/dialplan/default/ if you&#8217;re using the stock FreeSWITCH configuration. <a href='typo:code lang=&quot;xml&quot;'>typo:code lang=&quot;xml&quot;</a> <include>
+  <extension name='8084'>
+    <condition expression='^8084$' field='destination_number'>
+      <action application='set' data='continue_on_fail=true' /> <!-- we still need this to continue if bridging times out -->
+      <action application='set' data='call_timeout=5' />
+      <action application='socket' data='127.0.0.1:8084 sync full' />
+    </condition>
+  </extension>
+</include> &lt;/typo:code&gt;</p>
+
+<p>Then reloadxml on FreeSWITCH, make sure the GetDigits listener is started, and call 8084 on a phone registered to FreeSWITCH.</p>
+
+<p>This is only the Outbound Event Socket handler for FreeSWITCH in ruby. Other interfaces freeswitcher includes are the Inbound Event Socket handler and a CommandSocket, which allows any api or bgapi command. See the <a href='http://doc.rubyists.com/fsr'>docs</a> for the full scoop.</p>
