@@ -1,0 +1,6 @@
+--- 
+layout: post
+title: Emash Git
+typo_id: 3
+---
+Using git://rubyists.com/gits/emash will get the most current code.  Github will only be used for major releases.

@@ -1,0 +1,9 @@
+--- 
+layout: post
+title: RJS Errors with Firebug Goodness
+typo_id: 9
+---
+I use firebug for all of my javascript debugging.  It's an excellent application, but one thing that has always bothered me is that rail's built-in RJS exception handler shows it's output in an alert.  Firebug has the very handy console.log() function.  Why can't rails use that?
+
+Now it can.
+

@@ -1,0 +1,10 @@
+--- 
+layout: post
+title: Ride 0.4.8 Released
+typo_id: 22
+---
+Fixes in this release include
+ * (re)-inclusion of a generic .vimrc which loads the REAL_HOME/.vimrc and adds REAL_HOME/.vim to the vim runtimepath.
+ * Modifying the standard .irbrc to not load standard_error_hooks by default, you must now set the environment variable RIDE_DEBUG if you want the debug hooks, the method which RIDE uses to open files where exceptions were raised.
+ * Specs now leave each template_type in a separate directory to they can be inspected individually.
+ * Default behavior now is to edit a Ramaze tree.  Rails and NewGem/Generic Ruby functionality are still available.
