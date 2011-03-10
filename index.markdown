@@ -2,6 +2,10 @@
 layout: default
 title: The Rubyists
 ---
-Welcome to the home of The Rubyists.  We've consolodiated or are consolodating all of our sites under this one roof, thanks to GitHub Pages.
 
-Stay Tuned.
+{% for post in site.posts limit:10 %}
+  <article class="blogpost">
+    <h2>{{ post.title }}</h2>
+    {{ post.content }}
+  </article>
+{% endfor %}

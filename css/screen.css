@@ -1,0 +1,141 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  width: 60em;
+  margin: auto;
+  background: #333;
+  color: #fff;
+  font-family: 'Droid Sans', sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+p {
+  margin: 1em;
+}
+
+header {
+  width: 59em;
+  border-bottom: 1px solid #333;
+  padding: 0.5em;
+}
+
+header h1 a {
+  background: #111;
+  padding: 1em;
+  margin-bottom: 0.5em;
+  display: block;
+}
+
+header a {
+  color: #888;
+}
+
+header a:hover {
+  background: #191919;
+  color: #BBB;
+}
+
+header nav {
+  background: #111;
+  padding: 0.5em;
+}
+
+header nav ul {
+  list-style: none;
+}
+
+header nav li {
+  display: inline;
+}
+
+header nav a {
+  background: #333;
+  padding: 1em;
+  line-height: 3em;
+}
+
+#content {
+  width: 37em;
+  background: #111;
+  margin: 0.5em;
+  padding: 1em;
+  float: left;
+}
+
+article {
+  margin-bottom: 3em;
+  line-height: 1.6em;
+}
+
+article h2 {
+  color: #aaa;
+  background: url(/img/bgh1.gif) repeat-x left bottom;
+  margin-bottom: 1em;
+}
+
+article a {
+  color: #999;
+  text-decoration: underline;
+}
+
+article ul, article ol {
+  margin-left: 2em;
+}
+
+article table {
+  width: 100%;
+}
+
+#archive ul {
+  list-style: none;
+}
+
+#archive a {
+  color: #888;
+  padding: 0.5em;
+  display: block;
+}
+
+#sidebar {
+  background: #111;
+  width: 18em;
+  margin: 0.5em;
+  padding: 0.5em;
+  float: right;
+}
+
+#sidebar h2, #sidebar h3 {
+  text-align: center;
+}
+
+#sidebar ul {
+  list-style: none;
+  margin: 1em;
+}
+
+#sidebar li {
+  margin-top: 1em;
+}
+
+#sidebar a {
+  color: #888;
+}
+
+#projects li {
+  text-align: center;
+}
+
+footer {
+  clear: both;
+  text-align: center;
+  background: #191919;
+  border-top: 1px solid #444;
+  color: #999;
+  padding: 1em;
+}

@@ -5,89 +5,68 @@
     <meta name="description" content="description"/>
     <meta name="keywords" content="keywords"/> 
     <meta name="author" content="author"/> 
-    <link rel="stylesheet" type="text/css" href="/css/default.css" media="screen"/>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/css/screen.css" media="screen"/>
     <title>The Rubyists</title>
   </head>
-  <body style="margin: 0 12%;">
-    <div class="container">
-      <div class="header">
-        <a href="/"><span>The Rubyists</span></a>
-      </div>
+  <body>
+    <header>
+      <h1><a href="/">The Rubyists</a></h1>
 
-      <div class="stripes"><span></span></div>
+      <nav>
+        <ul>
+          <li><a href="/">Blog</a></li>
+          <li><a href="/archive.html">Archive</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="https://github.com/rubyists">Code</a></li>
+        </ul>
+      </nav>
+    </header>
 
-      <div class="nav">
-        <a href="/blog.html">Blog</a>
-        <a href="/about.html">About</a>
-        <a href="/contact.html">Contact</a>
-        <a href="https://github.com/rubyists">Code</a>
-        <div class="clearer"><span></span></div>
-      </div>
+    <section id="content">
+      {{ content }}
+    </section>
 
-      <div class="stripes"><span></span></div>
+    <section id="sidebar">
+      <h2>Recent</h2>
+      <ul id="recent">
+        {% for post in site.posts limit:5 %}
+          <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+        {% endfor %}
+      </ul>
 
-      <div class="main">
-        <div class="left">
-          <div class="content">
-            {{ content }}
-          </div>
-        </div>
+      <h2>Projects</h2>
+      <ul id="projects">
+        <li>
+          <h3>Freeswitcher</h3>
+          <a href="https://rubyists.github.com/freeswitcher">Home</a>,
+          <a href="https://github.com/rubyists/freeswitcher">Code</a>,
+          <a href="https://github.com/rubyists/freeswitcher/wiki">Wiki</a>,
+          <a href="https://github.com/rubyists/freeswitcher/issues">Issues</a>
+        </li>
 
-        <div class="right">
-          <div class="subnav">
-            <h1>Recent</h1>
-            <ul>
-              {% for post in site.posts limit:5 %}
-                <li><a href="{{ post.url }}">{{ post.title }}</a></li>
-              {% endfor %}
-            </ul>
-          </div>
+        <li>
+          <h3>Tiny Call Center</h3>
+          <a href="https://rubyists.github.com/tiny_call_center">Home</a>,
+          <a href="https://github.com/rubyists/tiny_call_center">Code</a>,
+          <a href="https://github.com/rubyists/tiny_call_center/wiki">Wiki</a>,
+          <a href="https://github.com/rubyists/tiny_call_center/issues">Issues</a>
+        </li>
 
-        </div>
+        <li>
+          <h3>Ramaze</h3>
+          <a href="http://ramaze.net/">home</a>,
+          <a href="https://github.com/Ramaze/ramaze">code</a>,
+          <a href="http://wiki.ramaze.net">wiki</a>,
+          <a href="http://book.ramaze.net">book</a>
+        </li>
+      </ul>
+    </section>
 
-        <div class="clearer"><span></span></div>
-
-      </div>
-
-      <div class="footer">
-        <div class="col3">
-          <h2>Freeswitcher</h2>
-          <ul>
-            <li><a href="http://rubyists.github.com/freeswitcher">home</a></li>
-            <li><a href="https://github.com/rubyists/freeswitcher">code</a></li>
-            <li><a href="https://github.com/rubyists/freeswitcher/wiki">wiki</a></li>
-            <li><a href="https://github.com/rubyists/freeswitcher/issues">issues</a></li>
-          </ul>
-
-        </div>
-
-        <div class="col3center">
-          <h2>Tiny Call Center</h2>
-          <ul>
-            <li><a href="http://rubyists.github.com/tiny_call_center">home</a></li>
-            <li><a href="https://github.com/rubyists/tiny_call_center">code</a></li>
-            <li><a href="https://github.com/rubyists/tiny_call_center/wiki">wiki</a></li>
-            <li><a href="https://github.com/rubyists/tiny_call_center/issues">issues</a></li>
-          </ul>
-        </div>
-
-        <div class="col3">
-          <h2>Ramaze</h2>
-          <ul>
-            <li><a href="http://ramaze.net/">home</a></li>
-            <li><a href="https://github.com/Ramaze/ramaze">code</a></li>
-            <li><a href="http://wiki.ramaze.net">wiki</a></li>
-            <li><a href="http://book.ramaze.net">book</a></li>
-          </ul>
-        </div>
-
-        <div class="bottom">
-          <span class="left">&copy; 2011 <a href="index.html">The Rubyists, LLC</a>. Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a> | Courtesy <a href="http://www.openwebdesign.org" target="_blank">Open Web Design</a></p>
-          </span>
-          <span class="right">Original template design by <a href="http://arcsin.se">Arcsin</a></span>
-          <div class="clearer"><span></span></div>
-        </div>
-      </div>
-    </div>
+    <footer>
+      <span id="copyright">&copy; 2011 <a href="/">The Rubyists, LLC</a>.</span>
+      <span id="validators">Valid <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML</a>.</span>
+    </footer>
   </body>
 </html>
