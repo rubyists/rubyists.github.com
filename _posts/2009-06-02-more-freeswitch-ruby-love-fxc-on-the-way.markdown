@@ -2,9 +2,19 @@
 layout: post
 title: More FreeSWITCH ruby love - FXC on the way
 ---
-With <a href="http://code.rubyists.com/projects/fs">FSR</a> well under way and being used both internally and in the wild for FreeSWITCH application development, the next logical step will be a Configurator for FreeSWITCH itself.  FreeSWITCH has long lacked the standard Administrator/User configuration available via web or GUI, FXC is intended to allow web interfaces for configuration to be built easily with any Rack application utilizing the FreeSWITCH xml\_curl  interface.   The first pass of FXC will include some Rack middleware which turns FreeSWITCH requests (to /) into easy to organize routes such as /directory/register/internal/1000, /dialplan/public/8885551212, /configuration/acl.conf.  The goal is to eliminate the gruntwork of routing by POST variables, exposing clean Rack-app routes up the stack (for ramaze, sinatra, etc).  The following is an example with ramaze.
 
-<strong><em>middleware.rb</em></strong>
+With [FSR](http://code.rubyists.com/projects/fs) well under way and being used both internally and in the wild for FreeSWITCH application development, the next logical step will be a Configurator for FreeSWITCH itself.
+
+FreeSWITCH has long lacked the standard Administrator/User configuration available via web or GUI, FXC is intended to allow web interfaces for configuration to be built easily with any Rack application utilizing the FreeSWITCH `xml_curl` interface.
+
+The first pass of FXC will include some Rack middleware which turns FreeSWITCH requests (to `/`) into easy to organize routes such as `/directory/register/internal/1000`, `/dialplan/public/8885551212`, `/configuration/acl.conf`.
+
+The goal is to eliminate the gruntwork of routing by POST variables, exposing clean Rack-app routes up the stack (for ramaze, sinatra, etc).
+
+The following is an example with Ramaze.
+
+### middleware.rb
+
 {% highlight ruby %}
 module FXC
   module Rack
@@ -64,21 +74,18 @@ module FXC
     end
   end
 end
-
 {% endhighlight %}
 
-<strong><em>controller/dialplan.rb</em></strong>
+### controller/dialplan.rb
+
 {% highlight ruby %}
-# Copyright (c) 2008-2009 The Rubyists, LLC (effortless systems) rubyists@rubyists.com
-# Distributed under the terms of the MIT license.
-# The full text can be found in the LICENSE file included with this software
 module FXC
   class Dialplan < Controller
     map '/dialplan'
     layout :dialplan
 
     def index(*args)
-      Ramaze::Log.info("Got unhandled dialplan request: " + request.inspect)
+      Ramaze::Log.info("Got unhandled dialplan request: #{request.inspect}")
       not_found
     end
 
@@ -101,16 +108,16 @@ module FXC
     end
   end
 end
-
 {% endhighlight %}
-In the FXC::Dialplan controller, each method represents a FreeSWICH <a href="http://wiki.freeswitch.org/wiki/Dialplan_XML#Context">dialplan context</a>.  Undefined contexts (in this ramaze controller) will fallthrough to
-the index method and be logged.  
 
-Finally,  the FreeSWITCH configuration to send requests to above app becomes a single line/single url
+In the FXC::Dialplan controller, each method represents a FreeSWICH [dialplan context](http://wiki.freeswitch.org/wiki/Dialplan_XML#Context).
+Undefined contexts (in this ramaze controller) will fallthrough to the index method and be logged.  
+
+Finally, the FreeSWITCH configuration to send requests to above app becomes a single line/single url
 
 <strong><em>conf/autoload_configs/xml_curl.conf.xml</em></strong>
-{% highlight xml %}
 
+{% highlight xml %}
 <configuration name="xml_curl.conf" description="cURL XML Gateway">
   <bindings>
     <binding name="fxc">
@@ -118,7 +125,6 @@ Finally,  the FreeSWITCH configuration to send requests to above app becomes a s
     </binding>
   </bindings>
 </configuration>
-
 {% endhighlight %}
 
 Next step is completing all the methods available for each binding type (configuration, dialplan, directory).  Once complete FreeSWITCH web config on Rack should follow rapidly.  That will be the "Look Ma, No XML" FXC release (TBA). 
