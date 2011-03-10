@@ -9,10 +9,12 @@ html {
   background: #333;
   color: #fff;
   font-family: 'Droid Sans', sans-serif;
+  font-size: 0.9em;
 }
 
 a {
   text-decoration: none;
+  color: #66f;
 }
 
 p {
@@ -37,7 +39,7 @@ header a {
 
 header a:hover {
   background: #191919;
-  color: #BBB;
+  color: #bbb;
 }
 
 header nav {
@@ -92,6 +94,13 @@ article ul, article ol {
 
 article table {
   width: 100%;
+}
+
+article .highlight {
+  background: #111;
+  padding: 1em;
+  margin: 1em 0em 1em 1em;
+  overflow: auto;
 }
 
 #archive ul {
