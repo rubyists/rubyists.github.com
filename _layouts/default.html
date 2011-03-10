@@ -24,44 +24,40 @@
       </nav>
     </header>
 
-    <section id="content">
-      {{ content }}
-    </section>
+    <section id="main">
+      <section id="content">
+        {{ content }}
+      </section>
 
-    <section id="sidebar">
-      <h2>Recent</h2>
-      <ul id="recent">
-        {% for post in site.posts limit:5 %}
-          <li><a href="{{ post.url }}">{{ post.title }}</a></li>
-        {% endfor %}
-      </ul>
+      <section id="sidebar">
+        <h2>Projects</h2>
+        <ul id="projects">
+          <li>
+            <h3>Freeswitcher</h3>
+            <a href="https://rubyists.github.com/freeswitcher">Home</a>,
+            <a href="https://github.com/rubyists/freeswitcher">Code</a>,
+            <a href="https://github.com/rubyists/freeswitcher/wiki">Wiki</a>,
+            <a href="https://github.com/rubyists/freeswitcher/issues">Issues</a>
+          </li>
 
-      <h2>Projects</h2>
-      <ul id="projects">
-        <li>
-          <h3>Freeswitcher</h3>
-          <a href="https://rubyists.github.com/freeswitcher">Home</a>,
-          <a href="https://github.com/rubyists/freeswitcher">Code</a>,
-          <a href="https://github.com/rubyists/freeswitcher/wiki">Wiki</a>,
-          <a href="https://github.com/rubyists/freeswitcher/issues">Issues</a>
-        </li>
+          <li>
+            <h3>Tiny Call Center</h3>
+            <a href="https://rubyists.github.com/tiny_call_center">Home</a>,
+            <a href="https://github.com/rubyists/tiny_call_center">Code</a>,
+            <a href="https://github.com/rubyists/tiny_call_center/wiki">Wiki</a>,
+            <a href="https://github.com/rubyists/tiny_call_center/issues">Issues</a>
+          </li>
 
-        <li>
-          <h3>Tiny Call Center</h3>
-          <a href="https://rubyists.github.com/tiny_call_center">Home</a>,
-          <a href="https://github.com/rubyists/tiny_call_center">Code</a>,
-          <a href="https://github.com/rubyists/tiny_call_center/wiki">Wiki</a>,
-          <a href="https://github.com/rubyists/tiny_call_center/issues">Issues</a>
-        </li>
-
-        <li>
-          <h3>Ramaze</h3>
-          <a href="http://ramaze.net/">home</a>,
-          <a href="https://github.com/Ramaze/ramaze">code</a>,
-          <a href="http://wiki.ramaze.net">wiki</a>,
-          <a href="http://book.ramaze.net">book</a>
-        </li>
-      </ul>
+          <li>
+            <h3>Ramaze</h3>
+            <a href="http://ramaze.net/">home</a>,
+            <a href="https://github.com/Ramaze/ramaze">code</a>,
+            <a href="http://wiki.ramaze.net">wiki</a>,
+            <a href="http://book.ramaze.net">book</a>
+          </li>
+        </ul>
+      </section>
+      <div class="clear"></div>
     </section>
 
     <footer>
