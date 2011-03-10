@@ -5,7 +5,7 @@ typo_id: 30
 ---
 While working on a project that required Ruby 1.9, I discovered that the FCGI library had not been ported yet to 1.9.  So, I did some googling, and found what sort of changes needed to be made to native extensions to make it work. The result is below in a patch applied to <strong>fcgi.c</strong> of version 0.8.7 from the Rubygem.  If I can get time, I'll post it on github and gem it up for easier installation.
 
-<typo:code lang="diff">
+{% highlight diff %}
 225c225
 <   len = FCGX_PutStr(RSTRING(str)->ptr, RSTRING(str)->len, stream);
 ---
@@ -26,6 +26,6 @@ While working on a project that required Ruby 1.9, I discovered that the FCGI li
 <   if (RSTRING(str)->len > 0)
 ---
 >   if (RSTRING_LEN(str) > 0)
-</typo:code>
+{% endhighlight %}
 
 You can also grab this as a diff from Pastr <a href="http://pastr.it/16176/diff">here</a>

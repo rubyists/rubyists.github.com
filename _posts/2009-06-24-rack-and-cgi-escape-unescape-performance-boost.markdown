@@ -120,15 +120,15 @@ You can optionally install [rack_fast_escape](http://github.com/bougyman/rack_fa
 
 Once installed, simply use
 
-<typo:code lang="ruby">
+{% highlight ruby %}
 require "rack_fast_escape"
-</typo:code>
+{% endhighlight %}
 
 to replace Rack::Utils version, or 
 
-<typo:code lang="ruby">
+{% highlight ruby %}
 require "cgi_fast_escape"
-</typo:code>
+{% endhighlight %}
 
 to replace the CGI version.  
 

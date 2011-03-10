@@ -17,7 +17,7 @@ On a small project using Ramaze, Sequel, and Bacon for specs, manveru and I came
 Create a database in a ram filesystem (/dev/shm mounted as tmpfs on linux), initialize a postgres cluster there,
 start the db server, and the user who does so has God rights to create/drop/manipulate the db without chance of affecting anyone else.  The db_helper.rb we use to accomplish this follows
 
-<typo:code lang="ruby">
+{% highlight ruby %}
 begin
   require "sequel"
 rescue LoadError
@@ -77,12 +77,12 @@ require File.expand_path('../../lib/fxc', __FILE__)
 Sequel::Migrator.apply(DB, FXC::MIGRATION_ROOT)
 
 require FXC::SPEC_HELPER_PATH/:helper
-</typo:code>
+{% endhighlight %}
 
 **The Result**
 Running our specs is now much faster, especially after the first run which initializes the cluster.
 
-<typo:code lang="plaintext">
+{% highlight text %}
 ## Before we run, stop the test db and wipe it out of memory
 bougyman@zero:~$ pg_ctl -o "-k /tmp/" stop
 waiting for server to shut down.... done
@@ -113,4 +113,4 @@ real    0m2.417s
 user    0m0.216s
 sys     0m0.044s
 ## Much faster on runs after the db is initialized
-</typo:code>
+{% endhighlight %}

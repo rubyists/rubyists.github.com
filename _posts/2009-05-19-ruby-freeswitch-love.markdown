@@ -16,7 +16,7 @@ This program will play a smooth wav file and read the DTMF
 tones entered by the caller.  It simply logs the received digits
 to the info facility (you should see it on stdout)
  
-<typo:code lang="ruby">
+{% highlight ruby %}
 require "rubygems"
 require "fsr"
 require "fsr/outbound"
@@ -31,11 +31,11 @@ class GetDigits < FSR::Listener::Outbound
   end
 end
 FSR.start_oes! GetDigits, :port => 8084, :host => "127.0.0.1"
-</typo:code>
+{% endhighlight %}
 
 In order to use the above script, add the following in your FreeSWITCH dialplan.  You can save it as
 00_socket_test.xml in conf/dialplan/default/ if you're using the stock FreeSWITCH configuration.
-<typo:code lang="xml">
+{% highlight xml %}
 <include>
   <extension name="8084">
     <condition field="destination_number" expression="^8084$">
@@ -45,7 +45,7 @@ In order to use the above script, add the following in your FreeSWITCH dialplan.
     </condition>
   </extension>
 </include>
-</typo:code>
+{% endhighlight %}
 
 Then reloadxml on FreeSWITCH, make sure the GetDigits listener is started, and call 8084 on a phone registered to FreeSWITCH.
 

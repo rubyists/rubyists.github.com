@@ -38,11 +38,11 @@ To download a tarball release:
 
 To download from upstream using git:
 <br />
-<typo:code>git clone git://rubyists.com/gits/queuetastic queuetastic</typo:code>
+{% highlight text %}git clone git://rubyists.com/gits/queuetastic queuetastic{% endhighlight %}
 <br />
 or
 <br />
-<typo:code>git clone git://github.com/thedonvaughn/queuetastic.git queuetastic</typo:code>
+{% highlight text %}git clone git://github.com/thedonvaughn/queuetastic.git queuetastic{% endhighlight %}
 <br />
 
 #####Wiki######
