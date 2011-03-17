@@ -3,13 +3,22 @@ layout: post
 title: More FreeSWITCH ruby love - FXC on the way
 ---
 
-With [FSR](http://code.rubyists.com/projects/fs) well under way and being used both internally and in the wild for FreeSWITCH application development, the next logical step will be a Configurator for FreeSWITCH itself.
+With [FSR](http://code.rubyists.com/projects/fs) well under way and being used
+both internally and in the wild for FreeSWITCH application development, the
+next logical step will be a Configurator for FreeSWITCH itself.
 
-FreeSWITCH has long lacked the standard Administrator/User configuration available via web or GUI, FXC is intended to allow web interfaces for configuration to be built easily with any Rack application utilizing the FreeSWITCH `xml_curl` interface.
+FreeSWITCH has long lacked the standard Administrator/User configuration
+available via web or GUI, FXC is intended to allow web interfaces for
+configuration to be built easily with any Rack application utilizing the
+FreeSWITCH `xml_curl` interface.
 
-The first pass of FXC will include some Rack middleware which turns FreeSWITCH requests (to `/`) into easy to organize routes such as `/directory/register/internal/1000`, `/dialplan/public/8885551212`, `/configuration/acl.conf`.
+The first pass of FXC will include some Rack middleware which turns FreeSWITCH
+requests (to `/`) into easy to organize routes such as
+`/directory/register/internal/1000`, `/dialplan/public/8885551212`,
+`/configuration/acl.conf`.
 
-The goal is to eliminate the gruntwork of routing by POST variables, exposing clean Rack-app routes up the stack (for ramaze, sinatra, etc).
+The goal is to eliminate the gruntwork of routing by POST variables, exposing
+clean Rack-app routes up the stack (for ramaze, sinatra, etc).
 
 The following is an example with Ramaze.
 
@@ -110,12 +119,15 @@ module FXC
 end
 {% endhighlight %}
 
-In the FXC::Dialplan controller, each method represents a FreeSWICH [dialplan context](http://wiki.freeswitch.org/wiki/Dialplan_XML#Context).
-Undefined contexts (in this ramaze controller) will fallthrough to the index method and be logged.  
+In the FXC::Dialplan controller, each method represents a FreeSWICH
+[dialplan context](http://wiki.freeswitch.org/wiki/Dialplan_XML#Context).
+Undefined contexts (in this ramaze controller) will fallthrough to the index
+method and be logged.  
 
-Finally, the FreeSWITCH configuration to send requests to above app becomes a single line/single url
+Finally, the FreeSWITCH configuration to send requests to above app becomes a
+single line / single url.
 
-<strong><em>conf/autoload_configs/xml_curl.conf.xml</em></strong>
+### conf/autoload_configs/xml_curl.conf.xml
 
 {% highlight xml %}
 <configuration name="xml_curl.conf" description="cURL XML Gateway">
@@ -127,5 +139,7 @@ Finally, the FreeSWITCH configuration to send requests to above app becomes a si
 </configuration>
 {% endhighlight %}
 
-Next step is completing all the methods available for each binding type (configuration, dialplan, directory).  Once complete FreeSWITCH web config on Rack should follow rapidly.  That will be the "Look Ma, No XML" FXC release (TBA). 
-
+Next step is completing all the methods available for each binding type
+(configuration, dialplan, directory).  Once complete FreeSWITCH web config on
+Rack should follow rapidly.  That will be the "Look Ma, No XML" FXC release
+(TBA).
