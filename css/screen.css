@@ -4,12 +4,13 @@
 }
 
 html {
-  width: 80%;
+  width: 90%;
   margin: auto;
   background: #333;
   color: #fff;
-  font-family: 'Droid Sans', sans-serif;
-  font-size: 0.9em;
+  font-family: 'Tinos', serif;
+  font-size: 1em;
+  line-height: 1.5em;
 }
 
 a {
@@ -18,17 +19,19 @@ a {
 }
 
 p {
-  margin: 1em;
+  width: 40em;
+  margin-bottom: 1em;
 }
 
 header {
   width: 100%;
+  min-width: 41em;
   border-bottom: 1px solid #333;
 }
 
 header h1 a {
   background: #111;
-  padding: 1em;
+  padding: 1em 0.5em 1em 0.5em;
   border-bottom: 1px solid #333;
   display: block;
 }
@@ -44,7 +47,6 @@ header a:hover {
 
 header nav {
   background: #1a1a1a;
-  padding: 0.5em;
 }
 
 header nav ul {
@@ -67,6 +69,7 @@ header nav a {
 
 #content {
   width: 75%;
+  min-width: 41em;
   float: left;
 }
 
@@ -74,7 +77,6 @@ article {
   padding: 1em;
   background: #303030;
   padding-bottom: 3em;
-  line-height: 1.6em;
 }
 
 article h2 {
@@ -95,16 +97,24 @@ article a {
 
 article ul, article ol {
   margin-left: 2em;
+  margin-bottom: 1em;
 }
 
 article table {
   width: 100%;
+  text-align: center;
+  margin: 1em 0em;
 }
 
-article .highlight {
-  background: #111;
+.highlight, code {
+  font-family: 'Droid Sans Mono', monospace;
+  font-size: 12px;
+}
+
+.highlight {
+  background: #222;
   padding: 1em;
-  margin: 1em 0em 1em 1em;
+  margin: 1em 0em 1em 0em;
   overflow: auto;
 }
 
@@ -120,8 +130,7 @@ article .highlight {
 
 #sidebar {
   background: #222;
-  width: 24.5%;
-  float: right;
+  padding-top: 1em;
 }
 
 #sidebar h2, #sidebar h3 {
