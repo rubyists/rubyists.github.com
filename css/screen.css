@@ -70,6 +70,7 @@ header nav a {
 #content {
   width: 75%;
   min-width: 41em;
+  min-height: 20em;
   float: left;
 }
 
@@ -124,13 +125,12 @@ article table {
 
 #archive a {
   color: #888;
-  padding: 0.5em;
   display: block;
 }
 
 #sidebar {
   background: #222;
-  padding-top: 1em;
+  padding: 1em 0em;
 }
 
 #sidebar h2, #sidebar h3 {

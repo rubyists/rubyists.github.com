@@ -2,7 +2,16 @@
 layout: default
 title: The Rubyists
 ---
-The best way to reach us is always in [#rubyists](http://webchat.freenode.net/?channels=rubyists&uio=d4) on PDPC's [freenode IRC Network](http://freenode.net).
 
+<article id="about">
+  <h2>Contact</h2>
+  <p>
+    The best way to reach us is always in
+    <a href="http://webchat.freenode.net/?channels=rubyists&amp;uio=d4">#rubyists</a> on
+    PDPC's <a href="http://freenode.net">freenode IRC Network</a>.
+  </p>
 
-If that's unavailable, email us: rubyists at rubyists dot com.
+  <p>
+    If that's unavailable, email us: rubyists at rubyists dot com.
+  </p>
+</article>

@@ -3,10 +3,11 @@ layout: default
 title: Archive
 ---
 
-<section id="archive">
+<article id="archive">
+  <h2>Archive</h2>
   <ul>
     {% for post in site.posts %}
       <li><a href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
   </ul>
-</section>
+</article>
