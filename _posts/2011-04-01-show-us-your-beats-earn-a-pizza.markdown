@@ -3,7 +3,7 @@ layout: post
 title: Show us your beats, earn a pizza
 ---
 We're getting the balling rolling on ebeats implementations by
-offering $25 for the individual or team who contributes the most 
+offering $77.77USD for the individual or team who contributes the most 
 implementations of ebeats by April 15, 2011.  
 
 Payment will be made via any method the winner chooses, save 
