@@ -9,5 +9,6 @@ implementations of ebeats by April 15, 2011.
 Payment will be made via any method the winner chooses, save 
 carrier pidgeon, we're fresh out.
 
-See (http://ebeats.org) and (https://github.com/rubyists/ebeats-implementations)
+See [Ebeats Home](http://ebeats.org) and 
+[Ebeats Implementations](https://github.com/rubyists/ebeats-implementations)
 for what-the-heck-is-an-ebeat
