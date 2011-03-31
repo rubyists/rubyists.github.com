@@ -1,3 +1,7 @@
+--- 
+layout: post
+title: Show Us Your Beats, Earn a Pizza
+---
 We're getting the balling rolling on ebeats implementations by
 offering $25 for the individual or team who contributes the most 
 implementations of ebeats by April 15, 2011.  
@@ -7,3 +11,6 @@ or contacting us at irc.freenode.net #rubyists.
 
 Payment will be made via any method the winner chooses, save 
 carrier pidgeon, we're fresh out.
+
+See ebeats.org and https://github.com/rubyists/ebeats-implementations
+for what-the-heck-is-an-ebeat
