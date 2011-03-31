@@ -11,4 +11,5 @@ carrier pidgeon, we're fresh out.
 
 See [Ebeats Home](http://ebeats.org) and 
 [Ebeats Implementations](https://github.com/rubyists/ebeats-implementations)
-for what-the-heck-is-an-ebeat
+for what-the-heck-is-an-ebeat, and to see which languages have already been
+implemented.
