@@ -2,7 +2,7 @@
 layout: post
 title: Show us your beats, earn a pizza
 ---
-We're getting the balling rolling on ebeats implementations by
+We're getting the ball rolling on ebeats implementations by
 offering $77.77USD for the individual or team who contributes the most 
 implementations of ebeats by April 15, 2011.  
 
