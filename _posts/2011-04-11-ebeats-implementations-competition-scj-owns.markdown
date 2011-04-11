@@ -2,7 +2,8 @@
 layout: post
 title: Ebeats Competition Leaderboard scj Killing It
 ---
-scj is claiming victory early, as his lead is (his words) insurmountable now.
+scj is claiming victory early in the [Ebeats Competition](http://rubyists.github.gom/2011-04-11-ebeats-implementations-competition-scj-owns.markdown),
+ as his lead is (his words) insurmountable now.
 He's implementent ebeats in everything from prolog to postscript, and he spits
 on the idea of anyone catching his couple-dozen implementation lead.
 
