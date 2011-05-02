@@ -35,7 +35,7 @@ this system include:
     run: /service/ssh: (pid 3757) 7700116s; run: log: (pid 3731) 7700117s
 
 
-  Look Mom, no pidfiles ever needed again!
+Look Mom, no pidfiles ever needed again!
 
 
  * Flexible dependency system, the [sv](http://smarden.org/runit/sv.8.html) program (with the check subcommand) allows any dependency tree you can dream of (and script).
