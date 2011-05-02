@@ -9,10 +9,12 @@ for runit utilities (including manpages).  Fully implmenting runit, as a replace
 in general at the runit page above and in detail for [Arch Linux](https://wiki.archlinux.org/index.php/Runit).  The bullet list of what we like about
 this system include:
 
+
  * Standalone environments, [chpst](http://smarden.org/runit/chpst.8.html) allows multiple controls around processes we run, including memory capping, user privileges, nice levels, lock files, open files, data segments, cores, stdin/out, and all environment variables.
  * A superb lightweight logging system in [svlogd](http://smarden.org/runit/svlogd.8.html), which accepts stdin and offers granular control of how to log that output, including rotation on many metrics (without stopping the process it's logging), post-processing, and notifications.
  * Process respawning, if a process stops, it will be started again immediately without intervention or outside process monitoring.
  * Concise output of process status, when using runit as an init replacement, the ideal service view is available with 
+
 
     bougyman@jimmy:~$ sudo sv s /service/*
     run: /service/callcenter: (pid 2870) 5266009s
@@ -32,7 +34,9 @@ this system include:
     run: /service/socklog-unix: (pid 3758) 7700116s; run: log: (pid 3756) 7700116s
     run: /service/ssh: (pid 3757) 7700116s; run: log: (pid 3731) 7700117s
 
+
   Look Mom, no pidfiles ever needed again!
+
 
  * Flexible dependency system, the [sv](http://smarden.org/runit/sv.8.html) program (with the check subcommand) allows any dependency tree you can dream of (and script).
  * Parallel startup, for services which have no dependencies, they all start concurrently, drasticly reducing time spent changing runlevels (including the initial boot).
