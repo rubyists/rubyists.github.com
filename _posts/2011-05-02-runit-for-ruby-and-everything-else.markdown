@@ -19,6 +19,7 @@ this system include:
  * No mysterious backgrounding, processes run in the foreground logging to stdout/stderr.  This requirement for well-behaved processes can be a blessing but some may see it as a curse; however, processes that are not well behaved can be supported through a 'once' service, if you absolutely cannot do without them.
  * Concise output of process status, when using runit as an init replacement, the ideal service view is available with 
 
+{% highlight sh %}
     bougyman@jimmy:~$ sudo sv s /service/*
     run: /service/callcenter: (pid 2870) 5266009s
     run: /service/cron: (pid 3769) 7700115s
@@ -37,6 +38,7 @@ this system include:
     run: /service/socklog-unix: (pid 3758) 7700116s; run: log: (pid 3756) 7700116s
     run: /service/ssh: (pid 3757) 7700116s; run: log: (pid 3731) 7700117s
 
+{% endhighlight %}
 Look Mom, no pidfiles ever needed again!
 
  
