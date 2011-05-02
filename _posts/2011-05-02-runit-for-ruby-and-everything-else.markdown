@@ -39,7 +39,4 @@ this system include:
     run: /service/ssh: (pid 3757) 7700116s; run: log: (pid 3731) 7700117s
 
 {% endhighlight %}
-Look Mom, no pidfiles ever needed again!
-
- 
-
+Look Mom, no pidfiles!
