@@ -214,7 +214,10 @@ That's a lot of manipulation in one tool, but most of them are rarely used.
 The -e/envdir option is the one we take advantage of most, essentially using it as a replacement for options/config files.  
 A directory of files where an enviroment variable will be created for each file, with the value set to the contents of that file, may appear cumbersome at first glance.  
 In practice, however, we find that changing one or two options is the most likely workflow.  
-With the envdir setup, this becomes `echo 'sofia/gateway/default/%s' > ~/service/fs2ws/env/TCC_ProxyServerFormatString`.  
+With the envdir setup, this becomes
+
+        echo 'sofia/gateway/default/%s' > ~/service/fs2ws/env/TCC_ProxyServerFormatString.
+
 Not so cumbersome for that!  It may indeed take longer to set these variables up the first time, but maintenance is not so bad.  
 One advantage of having this data in environment variables is the ability to query `/proc/PID/env/` for the options your ruby got on startup.  
 The second (more important) one we found is that we make fewer options.  
