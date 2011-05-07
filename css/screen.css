@@ -99,6 +99,11 @@ article a {
 article ul, article ol {
   margin-left: 2em;
   margin-bottom: 1em;
+  width: 38em;
+}
+
+article li {
+  margin-top: 0.5em;
 }
 
 article table {
