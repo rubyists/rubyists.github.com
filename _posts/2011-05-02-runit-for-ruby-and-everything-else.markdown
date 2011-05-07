@@ -45,16 +45,16 @@ As you can see, all services live in one place. The services in /service/\* are 
 The `run` file should start the process in the foreground with stderr redirected to stdout.  
 
 
-###### Example Service (sshd)
+##### Example Service (sshd)
 
-    `/etc/sv/sshd/run`:
+`/etc/sv/sshd/run`:
 
             #!/bin/sh
             exec /usr/sbin/sshd -De 2>&1
 
-###### Optional Log Service (for sshd)
+##### Optional Log Service (for sshd)
 
-    `/etc/sv/sshd/log/run`:
+`/etc/sv/sshd/log/run`:
 
             #!/bin/sh
             exec svlogd -t /var/log/sshd/
