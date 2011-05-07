@@ -63,22 +63,22 @@ The `run` file should start the process in the foreground with stderr redirected
 
 ### Svlogd Logging 
 
-    Runit includes a superb lightweight logging system in [svlogd](http://smarden.org/runit/svlogd.8.html).
+Runit includes a superb lightweight logging system in [svlogd](http://smarden.org/runit/svlogd.8.html).
 
-    When you supervise a process, the optional log service's stdout is directed to svlogd (or any other logger which accepts stdin).
+When you supervise a process, the optional log service's stdout is directed to svlogd (or any other logger which accepts stdin).
 
-    Svlogd offers granular control of how to log that output, including rotation on many metrics (without stopping the process it's logging),
-    post-processing of logs, networked logging (both standard syslog style and offers its own network option), notifications, filtering, and more.
+Svlogd offers granular control of how to log that output, including rotation on many metrics (without stopping the process it's logging),
+post-processing of logs, networked logging (both standard syslog style and offers its own network option), notifications, filtering, and more.
 
 ### Process respawning
 
-    if a process stops, it will be started again immediately without intervention
-    or outside process monitoring.
+if a process stops, it will be started again immediately without intervention
+or outside process monitoring.
 
 ### Flexible dependency system
 
-    the [sv](http://smarden.org/runit/sv.8.html) program (with the check
-    subcommand) allows any dependency tree you can dream of (and script).
+the [sv](http://smarden.org/runit/sv.8.html) program (with the check
+subcommand) allows any dependency tree you can dream of (and script).
 
 ### Parallel startup
 
