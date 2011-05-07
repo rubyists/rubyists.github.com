@@ -42,7 +42,7 @@ Runit offers a concise but complete view of process status, including the option
 
 As you can see, all services live in one place. The services in /service/\* are symlinks to directories (usually in /etc/sv/) which must contain one executable file, named 'run'.
 
-The `run` file should start the process in the foreground with stderr redirected to stdout.  
+The `run` file should start the process in the foreground with stderr redirected to stdout.
 
 
 ##### Example Service (sshd)
@@ -52,14 +52,14 @@ The `run` file should start the process in the foreground with stderr redirected
             #!/bin/sh
             exec /usr/sbin/sshd -De 2>&1
 
-##### Optional Log Service (for sshd)
+If a directory named log exists, it will be treated as a log service, by executing `log/run` and attaching the output of the running process to the input of `log/run`.
+
+##### Log Service (for sshd)
 
 `/etc/sv/sshd/log/run`:
 
             #!/bin/sh
             exec svlogd -t /var/log/sshd/
-
-  
 
 ### Svlogd Logging 
 
@@ -69,6 +69,31 @@ When you supervise a process, the optional log service's stdout is directed to s
 
 Svlogd offers granular control of how to log that output, including rotation on many metrics (without stopping the process it's logging),
 post-processing of logs, networked logging (both standard syslog style and offers its own network option), notifications, filtering, and more.
+
+##### Config file for a log service
+
+`/var/log/sshd/config`:
+
+        s100000
+        n10
+        N5
+        t86400
+        u192.168.6.20
+        pSSHD_LOG
+        -bougyman
+        !logwatcher
+
+The above would set the max size of a log file to 100000 bytes, keep 10 files maximum,
+5 files minimum (if the disk were full it would delete 6-10 until it had room),
+rotate every 86400 seconds (even if the size limit were not exceeded),
+network log to 192.168.6.20,
+prepend each log message with SSHD\_LOG,
+not log messages matching the pattern "bougyman",
+and upon rotation run each logfile through `sh -c 'logwatcher'`.
+
+Not very descriptive, but well documented (in `man svlogd`).  
+
+
 
 ### Process respawning
 
