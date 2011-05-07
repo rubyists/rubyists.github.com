@@ -95,13 +95,28 @@ Not very descriptive, but well documented (in `man svlogd`).
 
 ### Process respawning and control
 
-If a process stops, it will be started again immediately without intervention or outside process monitoring.
+If a process stops, it will be started again immediately without intervention or outside process monitoring.  
+`runsv` avoids a failed or faulty process hammering resources by delaying 1 second before starting a process back up if it's failing instantly.
 
 When a process stops, if a file named 'finish' exists and is executable, `finish` will be run with two arguments, the exit code and exit status of `run`.
 
-[`sv`](http://smarden.org/runit/sv.8.html) is used to get and change status of a particular service.  This is your swiss army knife of process control.
+##### Example `finish` script
 
+`/service/sshd/finish`:
+
+        #!/bin/sh
+        code=$1
+        status=$2
+        hostname=$(hostname)
+        if [ $status -ne 0 ];then
+          echo "SSHD FAILED on $hostname: $code, $status"|mail admins@domain.com
+        else
+          echo "SSHD Stopped on $hostname: $code, $status"|mail auditing@domain.com
+        fi
+  
 #### `sv` usage examples
+
+[`sv`](http://smarden.org/runit/sv.8.html) is used to get and change status of a particular service.  This is your swiss army knife of process control.
 
 Get status
 
@@ -137,13 +152,76 @@ Removing a symlink in `/service` (or your `$SVDIR` if not `/service`) will send 
 
 ### Flexible dependency system
 
-the [sv](http://smarden.org/runit/sv.8.html) program (with the check
-subcommand) allows any dependency tree you can dream of (and script).
+The [sv](http://smarden.org/runit/sv.8.html) program (with the check subcommand) also allows for any dependency tree you can dream of (and script).
+
+##### Basic dependency example
+
+`/service/lighttpd/run`:
+
+        #!/bin/sh -e
+        sv -w7 check postgresql
+        exec 2>&1 \
+          lighttpd -f /etc/lighttpd/lighttpd.conf -D
+
+This would wait 7 seconds for the postgresql service to be running, exiting with an error if that timout is reached.  
+`runsv` will then run this script again.  Lighttpd will never be executed unless sv check exits without an error (postgresql is up).
+
+#### Dependency hierarchies (Per-User service trees)
+
+Building on the above dependency checking, we can go one step further and give a user control over their own `$SVDIR`, `/home/username/service` here.  
+This gives non-root users the same ability to guarantee services are running, supervised, properly logged, and all the advantages of the main `$SVDIR`.
+
+##### User-level supervision example (with dependency checking)
+
+`/service/callcenter/run`:
+
+        #!/bin/sh -e
+        sv check postgresql couchdb memcached
+        exec 2>&1 \
+          sudo -H -u callcenter runsvdir -P /home/callcenter/service 'log:.........................................................................................................'
+
+Now any service directory the callcenter user symlinks in ~/service/ will get its own `runsv` process, running as callcenter.
+
+`/home/callcenter/service/fs2ws/run`:
+
+        #!/bin/sh -e
+        envdir=$PWD/env
+        root=$(<env/TCC_Root)
+        echo Starting from $root
+        cd $root
+        if [ -s $HOME/.rvm/scripts/rvm ]; then
+          source $HOME/.rvm/scripts/rvm
+          echo "Using RVM $(which rvm)"
+          rvm use 1.9.2 2>&1
+        fi
+        exec 2>&1 \
+          chpst -e $envdir ./bin/fs2ws 2>&1
+
+Finally, a hint of Ruby!  
+This script includes a check to see if rvm is installed and if so uses its 1.9.2 version.  
+The -e to `chpst` specifies an environment directory, which is a way to set environment variables, but `chpst` can do much more.
 
 ### Standalone environments 
 
 [chpst](http://smarden.org/runit/chpst.8.html) allows multiple controls around processes we run, including memory capping,
-user privileges, nice levels, lock files, open files, data segments, cores, stdin/out, and all environment variables.
+user privileges, nice levels, lock files, open files, data segments, cores, stdin/out, and all environment variables.  
+It is the swiss army knife for manipulating what a running process can do.  
+This command encapsulates all of the functionality  of the daemontools commands `setuidgid`, `envuidgid`, `envdir` (used above), `softlimit`, `setlock`.
+If called as one of those commands, it will behave as that utility.  
+`chpst` adds the behavior of `pgrphack` and `fghack`, as well as some behavior not available in daemontools such as nice level.
+
+That's a lot of manipulation in one tool, but most of them are rarely used.  
+The -e/envdir option is the one we take advantage of most, essentially using it as a replacement for options/config files.  
+A directory of files where an enviroment variable will be created for each file, with the value set to the contents of that file, may appear cumbersome at first glance.  
+In practice, however, we find that changing one or two options is the most likely workflow.  
+With the envdir setup, this becomes `echo 'sofia/gateway/default/%s' > ~/service/fs2ws/env/TCC_ProxyServerFormatString`.  
+Not so cumbersome for that!  It may indeed take longer to set these variables up the first time, but maintenance is not so bad.  
+One advantage of having this data in environment variables is the ability to query `/proc/PID/env/` for the options your ruby got on startup.  
+The second (more important) one we found is that we make fewer options.  
+That's right, it makes us think about each option we add, knowing it will be another file in `env/`.  So we don't have as many options.  Good Thing.
+
+Now our (ruby) process has access to all of these in `ENV["TCC_*"]`, how to use them?.  
+See the Tiny Call Center [default envdir](https://github.com/rubyists/tiny_call_center/tree/master/sv/env) and [options.rb](https://github.com/rubyists/tiny_call_center/blob/master/options.rb) for one way to glue them., but rolling your own should be trivial (just look at `ENV` in a `chpst -e ./env irb`).
 
 ### Parallel startup
 
