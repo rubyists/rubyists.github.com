@@ -235,7 +235,7 @@ boot).
 
 ### Infinite runlevels
 
-You are not limited to `0`-`6`, and nothing is reserved.
+You are not limited to `0`-`6`, with only `current` and `previous` as reserved.
 
 Runlevels become (unlimited amount of) directories of services (in `/etc/runit/runsvdir`) which can be switched to quickly and simply.
 
