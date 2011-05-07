@@ -1,12 +1,13 @@
 --- 
 layout: post
 title: Runit for Ruby (And Everything Else)
+author: TJ Vanderpoel
 ---
 The [Runit](http://smarden.org/runit) system is a process supervisor and set of utilities surrounding supervising processes.
 
 It can be used as a sysvinit replacement or run side-by-side with many init systems to maintain supervised process heirarchies.
 
-We began using runit as a replacement for daemontools, both because of the licensing at the time and for the extensive documentation offerred for runit utilities (including manpages).
+We began using runit as a replacement for daemontools in November 2001, because runit was OSI licensed at the time (daemontools was not) and for the extensive documentation offerred for runit utilities (including manpages).
 
 Fully implmenting runit, as a replacement for init/PID 1 or as a standalone supervisor, is covered in general at the runit page above and in detail for [Arch Linux](https://wiki.archlinux.org/index.php/Runit).
 
@@ -58,8 +59,8 @@ runsv will create a pipe and redirect standard out of the service (and its optio
 
 `/etc/sv/sshd/log/run`:
 
-            #!/bin/sh
-            exec svlogd -t /var/log/sshd/
+        #!/bin/sh
+        exec svlogd -t /var/log/sshd/
 
 ### Svlogd Logging 
 
@@ -206,7 +207,7 @@ The -e to `chpst` specifies an environment directory, which is a way to set envi
 [chpst](http://smarden.org/runit/chpst.8.html) allows multiple controls around processes we run, including memory capping,
 user privileges, nice levels, lock files, open files, data segments, cores, stdin/out, and all environment variables.  
 It is the swiss army knife for manipulating what a running process can do.  
-This command encapsulates all of the functionality  of the daemontools commands `setuidgid`, `envuidgid`, `envdir` (used above), `softlimit`, `setlock`.
+This command encapsulates all of the functionality  of the daemontools commands `setuidgid`, `envuidgid`, `envdir` (used above), `softlimit`, and `setlock`.
 If called as one of those commands, it will behave as that utility.  
 `chpst` adds the behavior of `pgrphack` and `fghack`, as well as some behavior not available in daemontools such as nice level.
 
@@ -243,9 +244,8 @@ Runlevels become (unlimited amount of) directories of services (in `/etc/runit/r
 
 ### No mysterious backgrounding
 
-Processes run in the foreground logging to stdout/stderr. 
-
-This requirement for well-behaved processes can be a blessing but some may see it as a curse.
-
-Processes that are not well behaved can be supported through a `once` service, if you absolutely cannot do without them.
+Processes run in the foreground logging to stdout/stderr.  
+This requirement for well-behaved processes can be a blessing but some may see it as a curse.  
+Processes that are not well behaved can be supported through a `once` service, if you absolutely cannot do without them.  
+We use this as a bit of a litmus test for potential new services.  When they can not run in a well-behaved manner that's a high-priority Con, one which takes extraordinary Pros or absolutely necessary business-case to overcome.
 
