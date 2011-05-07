@@ -12,11 +12,6 @@ Fully implmenting runit, as a replacement for init/PID 1 or as a standalone supe
 
 Some things we especially like about this system are:
 
-### Standalone environments 
-
-[chpst](http://smarden.org/runit/chpst.8.html) allows multiple controls around processes we run, including memory capping,
-user privileges, nice levels, lock files, open files, data segments, cores, stdin/out, and all environment variables.
-
 ### Service View
 
 Runit offers a concise but complete view of process status, including the optional log service. 
@@ -40,10 +35,13 @@ Runit offers a concise but complete view of process status, including the option
         run: /service/ssh: (pid 3757) 7700116s; run: log: (pid 3731) 7700117s  
 
 
-As you can see, all services live in one place. The services in /service/\* are symlinks to directories (usually in /etc/sv/) which must contain one executable file, named 'run'.
+As you can see, all services live in one place, defined by `$SVDIR` or `/service` by default, which [`runsvdir`](http://smarden.org/runit/runsvdir.8.html) manages.  
+The services in `/service/\*` are symlinks to directories (usually in `/etc/sv/`) which must contain one executable file, named 'run'.
 
-The `run` file should start the process in the foreground with stderr redirected to stdout.
+The `run` executable should exec the process in the foreground with stderr redirected to stdout.
 
+Runit avoids unecessary complexity by separating the roles into small, dietlibc-friendly utilities, written in C without library dependencies.  
+The above listing represents many individual services, each with one instance of the per-process supervisor [`runsv`](http://smarden.org/runit/runsv.8.html) running.
 
 ##### Example Service (sshd)
 
@@ -52,7 +50,9 @@ The `run` file should start the process in the foreground with stderr redirected
             #!/bin/sh
             exec /usr/sbin/sshd -De 2>&1
 
-If a directory named log exists, it will be treated as a log service, by executing `log/run` and attaching the output of the running process to the input of `log/run`.
+If the directory `log/` exists, it will be treated as a log service. 
+
+runsv will create a pipe and redirect standard out of the service (and its optional `finish` script) to `log/run`.
 
 ##### Log Service (for sshd)
 
@@ -70,7 +70,7 @@ When you supervise a process, the optional log service's stdout is directed to s
 Svlogd offers granular control of how to log that output, including rotation on many metrics (without stopping the process it's logging),
 post-processing of logs, networked logging (both standard syslog style and offers its own network option), notifications, filtering, and more.
 
-##### Config file for a log service
+#### Config file for a log service
 
 `/var/log/sshd/config`:
 
@@ -93,17 +93,57 @@ and upon rotation run each logfile through `sh -c 'logwatcher'`.
 
 Not very descriptive, but well documented (in `man svlogd`).  
 
+### Process respawning and control
 
+If a process stops, it will be started again immediately without intervention or outside process monitoring.
 
-### Process respawning
+When a process stops, if a file named 'finish' exists and is executable, `finish` will be run with two arguments, the exit code and exit status of `run`.
 
-if a process stops, it will be started again immediately without intervention
-or outside process monitoring.
+[`sv`](http://smarden.org/runit/sv.8.html) is used to get and change status of a particular service.  This is your swiss army knife of process control.
+
+#### `sv` usage examples
+
+Get status
+
+        # sv s sshd
+        run: sshd: (pid 4040) 6435s; run: log: (pid 4028) 6435s
+
+Send the TERM signal, which will restart a process.  This works because runsv will always keep a process started unless you tell it to stay down.
+
+        # sv t sshd
+
+Generally there will be no output from such commands, use -v to get some output (examples from here on out will use -v)
+
+        # sv -v t sshd
+        ok: run: sshd: (pid 26764) 0s
+
+Stop a service and keep it down (until the next boot or you specifically tell it to come back up)
+
+        # sv -v d sshd
+        ok: down: sshd: 1s, normally up
+
+Send USR1 to a service
+
+        # sv -v 1 sshd
+        ok: down: sshd: 56s, normally up
+
+Remove a service (stop it and make it not start back up, even on boot)
+   
+        # rm /service/sshd
+
+    Of course there will be no sv output from the above.
+
+Removing a symlink in `/service` (or your `$SVDIR` if not `/service`) will send the equivalent of an `sv d`(own) to `runsv`, stopping the process and its log service, then stopping runsv.
 
 ### Flexible dependency system
 
 the [sv](http://smarden.org/runit/sv.8.html) program (with the check
 subcommand) allows any dependency tree you can dream of (and script).
+
+### Standalone environments 
+
+[chpst](http://smarden.org/runit/chpst.8.html) allows multiple controls around processes we run, including memory capping,
+user privileges, nice levels, lock files, open files, data segments, cores, stdin/out, and all environment variables.
 
 ### Parallel startup
 
