@@ -36,7 +36,7 @@ Runit offers a concise but complete view of process status, including the option
 
 
 As you can see, all services live in one place, defined by `$SVDIR` or `/service` by default, which [`runsvdir`](http://smarden.org/runit/runsvdir.8.html) manages.  
-The services in `/service/\*` are symlinks to directories (usually in `/etc/sv/`) which must contain one executable file, named 'run'.
+The services in `/service/*` are symlinks to directories (usually in `/etc/sv/`) which must contain one executable file, named 'run'.
 
 The `run` executable should exec the process in the foreground with stderr redirected to stdout.
 
