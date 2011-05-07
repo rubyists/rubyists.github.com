@@ -38,8 +38,6 @@ Concise output of process status, when using runit as an init replacement.
     run: /service/socklog-unix: (pid 3758) 7700116s; run: log: (pid 3756) 7700116s
     run: /service/ssh: (pid 3757) 7700116s; run: log: (pid 3731) 7700117s
 
-Look Mom, no pidfiles!
-
   As you can see, all services live in one place. The services in /service/\* are symlinks to directories (usually in /etc/sv/) which must contain one executable file, named 'run'.
 
   This 'run' file should start the process in the foreground with stderr redirected to stdout.
