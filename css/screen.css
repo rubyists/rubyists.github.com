@@ -112,6 +112,10 @@ article table {
   margin: 1em 0em;
 }
 
+article pre {
+  margin-bottom: 1em;
+}
+
 .highlight, code {
   font-family: 'Droid Sans Mono', monospace;
   font-size: 12px;
