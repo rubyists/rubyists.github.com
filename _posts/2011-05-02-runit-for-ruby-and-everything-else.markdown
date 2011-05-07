@@ -94,9 +94,3 @@ post-processing of logs, networked logging (both standard syslog style and offer
   however, processes that are not well behaved can be supported through a
   `once` service, if you absolutely cannot do without them.
 
- * Process respawning, if a process stops, it will be started again immediately without intervention or outside process monitoring.
- * Flexible dependency system, the [sv](http://smarden.org/runit/sv.8.html) program (with the check subcommand) allows any dependency tree you can dream of (and script).
- * Parallel startup, for services which have no dependencies, they all start concurrently, drasticly reducing time spent changing runlevels (including the initial boot).
- * Infinite runlevels, you are not limited to 0-7, and nothing is reserved.  Runlevels become (unlimited amount of) directories of services (in /etc/runit/runsvdir) which can be switched to quickly and simply.
- * No mysterious backgrounding, processes run in the foreground logging to stdout/stderr.  This requirement for well-behaved processes can be a blessing but some may see it as a curse; however, processes that are not well behaved can be supported through a 'once' service, if you absolutely cannot do without them.
-
