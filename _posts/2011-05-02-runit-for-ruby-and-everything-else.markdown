@@ -17,23 +17,23 @@ Some things we especially like about this system are:
 
 Runit offers a concise but complete view of process status, including the optional log service. 
 
-        bougyman@jimmy:~$ sudo sv s /service/*
-        run: /service/callcenter: (pid 2870) 5266009s
-        run: /service/cron: (pid 3769) 7700115s
-        run: /service/fxc: (pid 3714) 7700118s
-        run: /service/getty-1: (pid 3713) 7700118s
-        run: /service/getty-2: (pid 3730) 7700117s
-        run: /service/getty-3: (pid 3716) 7700118s
-        run: /service/getty-4: (pid 3690) 7700118s
-        run: /service/getty-5: (pid 3691) 7700118s
-        run: /service/helpdesk: (pid 3715) 7700118s
-        run: /service/lighttpd: (pid 27321) 5208602s; run: log: (pid 3724) 7700117s
-        run: /service/openntpd: (pid 3747) 7700116s; run: log: (pid 3741) 7700117s
-        run: /service/postgres: (pid 3732) 7700117s
-        run: /service/redmine: (pid 3729) 7700117s
-        run: /service/socklog-klog: (pid 3746) 7700116s; run: log: (pid 3733) 7700117s
-        run: /service/socklog-unix: (pid 3758) 7700116s; run: log: (pid 3756) 7700116s
-        run: /service/ssh: (pid 3757) 7700116s; run: log: (pid 3731) 7700117s  
+    bougyman@jimmy:~$ sudo sv s /service/*
+    run: /service/callcenter: (pid 2870) 5266009s
+    run: /service/cron: (pid 3769) 7700115s
+    run: /service/fxc: (pid 3714) 7700118s
+    run: /service/getty-1: (pid 3713) 7700118s
+    run: /service/getty-2: (pid 3730) 7700117s
+    run: /service/getty-3: (pid 3716) 7700118s
+    run: /service/getty-4: (pid 3690) 7700118s
+    run: /service/getty-5: (pid 3691) 7700118s
+    run: /service/helpdesk: (pid 3715) 7700118s
+    run: /service/lighttpd: (pid 27321) 5208602s; run: log: (pid 3724) 7700117s
+    run: /service/openntpd: (pid 3747) 7700116s; run: log: (pid 3741) 7700117s
+    run: /service/postgres: (pid 3732) 7700117s
+    run: /service/redmine: (pid 3729) 7700117s
+    run: /service/socklog-klog: (pid 3746) 7700116s; run: log: (pid 3733) 7700117s
+    run: /service/socklog-unix: (pid 3758) 7700116s; run: log: (pid 3756) 7700116s
+    run: /service/ssh: (pid 3757) 7700116s; run: log: (pid 3731) 7700117s  
 
 
 As you can see, all services live in one place, defined by `$SVDIR` or `/service` by default, which [`runsvdir`](http://smarden.org/runit/runsvdir.8.html) manages.  
@@ -48,8 +48,8 @@ The above listing represents many individual services, each with one instance of
 
 `/etc/sv/sshd/run`:
 
-            #!/bin/sh
-            exec /usr/sbin/sshd -De 2>&1
+    #!/bin/sh
+    exec /usr/sbin/sshd -De 2>&1
 
 If the directory `log/` exists, it will be treated as a log service. 
 
@@ -59,8 +59,8 @@ runsv will create a pipe and redirect standard out of the service (and its optio
 
 `/etc/sv/sshd/log/run`:
 
-        #!/bin/sh
-        exec svlogd -t /var/log/sshd/
+    #!/bin/sh
+    exec svlogd -t /var/log/sshd/
 
 ### Svlogd Logging 
 
@@ -75,14 +75,14 @@ post-processing of logs, networked logging (both standard syslog style and offer
 
 `/var/log/sshd/config`:
 
-        s100000
-        n10
-        N5
-        t86400
-        u192.168.6.20
-        pSSHD_LOG
-        -bougyman
-        !logwatcher
+    s100000
+    n10
+    N5
+    t86400
+    u192.168.6.20
+    pSSHD_LOG
+    -bougyman
+    !logwatcher
 
 The above would set the max size of a log file to 100000 bytes, keep 10 files maximum,
 5 files minimum (if the disk were full it would delete 6-10 until it had room),
@@ -105,49 +105,49 @@ When a process stops, if a file named 'finish' exists and is executable, `finish
 
 `/service/sshd/finish`:
 
-        #!/bin/sh
-        code=$1
-        status=$2
-        hostname=$(hostname)
-        if [ $status -ne 0 ];then
-          echo "SSHD FAILED on $hostname: $code, $status"|mail admins@domain.com
-        else
-          echo "SSHD Stopped on $hostname: $code, $status"|mail auditing@domain.com
-        fi
-  
+    #!/bin/sh
+    code=$1
+    status=$2
+    hostname=$(hostname)
+    if [ $status -ne 0 ];then
+      echo "SSHD FAILED on $hostname: $code, $status"|mail admins@domain.com
+    else
+      echo "SSHD Stopped on $hostname: $code, $status"|mail auditing@domain.com
+    fi
+
 #### `sv` usage examples
 
 [`sv`](http://smarden.org/runit/sv.8.html) is used to get and change status of a particular service.  This is your swiss army knife of process control.
 
 Get status
 
-        # sv s sshd
-        run: sshd: (pid 4040) 6435s; run: log: (pid 4028) 6435s
+    $ sv s sshd
+    run: sshd: (pid 4040) 6435s; run: log: (pid 4028) 6435s
 
 Send the TERM signal, which will restart a process.  This works because runsv will always keep a process started unless you tell it to stay down.
 
-        # sv t sshd
+    $ sv t sshd
 
 Generally there will be no output from such commands, use -v to get some output (examples from here on out will use -v)
 
-        # sv -v t sshd
-        ok: run: sshd: (pid 26764) 0s
+    $ sv -v t sshd
+    ok: run: sshd: (pid 26764) 0s
 
 Stop a service and keep it down (until the next boot or you specifically tell it to come back up)
 
-        # sv -v d sshd
-        ok: down: sshd: 1s, normally up
+    $ sv -v d sshd
+    ok: down: sshd: 1s, normally up
 
 Send USR1 to a service
 
-        # sv -v 1 sshd
-        ok: down: sshd: 56s, normally up
+    $ sv -v 1 sshd
+    ok: down: sshd: 56s, normally up
 
 Remove a service (stop it and make it not start back up, even on boot)
-   
-        # rm /service/sshd
 
-    Of course there will be no sv output from the above.
+    $ rm /service/sshd
+
+Of course there will be no sv output from the above.
 
 Removing a symlink in `/service` (or your `$SVDIR` if not `/service`) will send the equivalent of an `sv d`(own) to `runsv`, stopping the process and its log service, then stopping runsv.
 
@@ -159,10 +159,10 @@ The [sv](http://smarden.org/runit/sv.8.html) program (with the check subcommand)
 
 `/service/lighttpd/run`:
 
-        #!/bin/sh -e
-        sv -w7 check postgresql
-        exec 2>&1 \
-          lighttpd -f /etc/lighttpd/lighttpd.conf -D
+    #!/bin/sh -e
+    sv -w7 check postgresql
+    exec 2>&1 \
+      lighttpd -f /etc/lighttpd/lighttpd.conf -D
 
 This would wait 7 seconds for the postgresql service to be running, exiting with an error if that timout is reached.  
 `runsv` will then run this script again.  Lighttpd will never be executed unless sv check exits without an error (postgresql is up).
@@ -176,27 +176,27 @@ This gives non-root users the same ability to guarantee services are running, su
 
 `/service/callcenter/run`:
 
-        #!/bin/sh -e
-        sv check postgresql couchdb memcached
-        exec 2>&1 \
-          sudo -H -u callcenter runsvdir -P /home/callcenter/service 'log:.........................................................................................................'
+    #!/bin/sh -e
+    sv check postgresql couchdb memcached
+    exec 2>&1 \
+      sudo -H -u callcenter runsvdir -P /home/callcenter/service 'log:.........................................................................................................'
 
 Now any service directory the callcenter user symlinks in ~/service/ will get its own `runsv` process, running as callcenter.  _None_ of the callcenter user's processes will be started (because `runsvdir` will not run) until postgresql, couchdb, and memcached are up and running successfully.
 
 `/home/callcenter/service/fs2ws/run`:
 
-        #!/bin/sh -e
-        envdir=$PWD/env
-        root=$(<env/TCC_Root)
-        echo Starting from $root
-        cd $root
-        if [ -s $HOME/.rvm/scripts/rvm ]; then
-          source $HOME/.rvm/scripts/rvm
-          echo "Using RVM $(which rvm)"
-          rvm use 1.9.2 2>&1
-        fi
-        exec 2>&1 \
-          chpst -e $envdir ./bin/fs2ws 2>&1
+    #!/bin/sh -e
+    envdir=$PWD/env
+    root=$(<env/TCC_Root)
+    echo Starting from $root
+    cd $root
+    if [ -s $HOME/.rvm/scripts/rvm ]; then
+      source $HOME/.rvm/scripts/rvm
+      echo "Using RVM $(which rvm)"
+      rvm use 1.9.2 2>&1
+    fi
+    exec 2>&1 \
+      chpst -e $envdir ./bin/fs2ws 2>&1
 
 Finally, a hint of Ruby!  
 This script includes a check to see if rvm is installed and if so uses its 1.9.2 version.  
@@ -204,14 +204,17 @@ The -e to `chpst` specifies an environment directory, which is a way to set envi
 
 ##### What's with all the dots?
 
-> The log:............ is a construct runsvdir uses to log to proctitle (seen in ps aux).  Each dot represents 15 seconds of time, with any stderr/out being flushed to proctitle for each dot.  
+> The log:............ is a construct runsvdir uses to log to proctitle (seen
+> in ps aux).  Each dot represents 15 seconds of time, with any stderr/out
+> being flushed to proctitle for each dot.
 > Thus if you saw
 
-        root      4001  0.0  0.0    184    28 ?        Ss   08:00   0:00 runsvdir -P /service log: ed with loglevel notice?Could not load host key: /etc/ssh/ssh_host_ecdsa_key??...
+    USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+    root      4001  0.0  0.0    184    28 ?        Ss   08:00   0:00 runsvdir -P /service log: ed with loglevel notice?Could not load host key: /etc/ssh/ssh_host_ecdsa_key??...
 
 You'd know sshd had a problem, but it hasn't had that problem in 45 seconds.
 
-### Standalone environments 
+### Standalone environments
 
 [chpst](http://smarden.org/runit/chpst.8.html) allows multiple controls around processes we run, including memory capping,
 user privileges, nice levels, lock files, open files, data segments, cores, stdin/out, and all environment variables.  
@@ -226,7 +229,7 @@ A directory of files where an enviroment variable will be created for each file,
 In practice, however, we find that changing one or two options is the most likely workflow.  
 With the envdir setup, this becomes
 
-        echo 'sofia/gateway/default/%s' > ~/service/fs2ws/env/TCC_ProxyServerFormatString
+    echo 'sofia/gateway/default/%s' > ~/service/fs2ws/env/TCC_ProxyServerFormatString
 
 Not so cumbersome for that!  It may indeed take longer to set these variables up the first time, but maintenance is not so bad.  
 One advantage of having this data in environment variables is the ability to query `/proc/PID/env/` for the options your ruby got on startup.  
@@ -253,7 +256,7 @@ Because POST has varied on the systems, the initial boot times and reboot times 
     640G 7200RPM Sata HD
     Intel Graphics on board
     Post time 5-7 seconds.
-    
+
 <table>
   <thead>
     <tr>
@@ -296,7 +299,7 @@ Because POST has varied on the systems, the initial boot times and reboot times 
     Corsair Performance III SSD
     Nvidia GTX460m 1.5G Discreet Graphics
     Post time 2-4 seconds.
-    
+
 <table>
   <thead>
     <tr>
@@ -340,8 +343,11 @@ You are not limited to `0`-`6`, with only `current` and `previous` as reserved.
 
 Runlevels become (unlimited amount of) directories of services (in `/etc/runit/runsvdir`) which can be switched to quickly and simply.
 
-        # runsvchdir primary # Switch to the services described in `/etc/runit/runsvdir/primary`
-        # runsvchdir failover # Switch to the services described in `/etc/runit/runsvdir/failover`
+    # Switch to the services described in `/etc/runit/runsvdir/primary`
+    $ runsvchdir primary
+
+    # Switch to the services described in `/etc/runit/runsvdir/failover`
+    $ runsvchdir failover
 
 ### No mysterious backgrounding
 

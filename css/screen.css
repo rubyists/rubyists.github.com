@@ -114,6 +114,10 @@ article table {
 
 article pre {
   margin-bottom: 1em;
+  padding-left: 1em;
+  width: 49em;
+  background: #222;
+  overflow: auto;
 }
 
 .highlight, code {
