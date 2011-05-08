@@ -183,6 +183,20 @@ This gives non-root users the same ability to guarantee services are running, su
 
 Now any service directory the callcenter user symlinks in ~/service/ will get its own `runsv` process, running as callcenter.  _None_ of the callcenter user's processes will be started (because `runsvdir` will not run) until postgresql, couchdb, and memcached are up and running successfully.
 
+##### What's with all the dots?
+
+> The log:............ is a construct runsvdir uses to log to proctitle (seen
+> in ps aux).  Each dot represents 15 seconds of time, with any stderr/out
+> being flushed to proctitle for each dot.
+> Thus if you saw
+
+    USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+    root      4001  0.0  0.0    184    28 ?        Ss   08:00   0:00 runsvdir -P /service log: ed with loglevel notice?Could not load host key: /etc/ssh/ssh_host_ecdsa_key??...
+
+You'd know sshd had a problem, but it hasn't had that problem in 45 seconds.
+
+##### Example Ruby Service for a User
+
 `/home/callcenter/service/fs2ws/run`:
 
     #!/bin/sh -e
@@ -201,18 +215,6 @@ Now any service directory the callcenter user symlinks in ~/service/ will get it
 Finally, a hint of Ruby!  
 This script includes a check to see if rvm is installed and if so uses its 1.9.2 version.  
 The -e to `chpst` specifies an environment directory, which is a way to set environment variables, but `chpst` can do much more.
-
-##### What's with all the dots?
-
-> The log:............ is a construct runsvdir uses to log to proctitle (seen
-> in ps aux).  Each dot represents 15 seconds of time, with any stderr/out
-> being flushed to proctitle for each dot.
-> Thus if you saw
-
-    USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-    root      4001  0.0  0.0    184    28 ?        Ss   08:00   0:00 runsvdir -P /service log: ed with loglevel notice?Could not load host key: /etc/ssh/ssh_host_ecdsa_key??...
-
-You'd know sshd had a problem, but it hasn't had that problem in 45 seconds.
 
 ### Standalone environments
 
