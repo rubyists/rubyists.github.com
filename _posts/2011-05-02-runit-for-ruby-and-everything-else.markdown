@@ -172,15 +172,6 @@ This would wait 7 seconds for the postgresql service to be running, exiting with
 Building on the above dependency checking, we can go one step further and give a user control over their own `$SVDIR`, `/home/username/service` here.  
 This gives non-root users the same ability to guarantee services are running, supervised, properly logged, and all the advantages of the main `$SVDIR`.
 
-##### What's with all the dots?
-
-> The log:............ is a construct runsvdir uses to log to proctitle (seen in ps aux).  Each dot represents 15 seconds of time, with any stderr/out being flushed to proctitle for each dot.  
-> Thus if you saw
-
-        root      4001  0.0  0.0    184    28 ?        Ss   08:00   0:00 runsvdir -P /service log: ed with loglevel notice?Could not load host key: /etc/ssh/ssh_host_ecdsa_key??...
-
-You'd know sshd had a problem, but it hasn't had that problem in 45 seconds.
-
 ##### User-level supervision example (with dependency checking)
 
 `/service/callcenter/run`:
@@ -210,6 +201,15 @@ Now any service directory the callcenter user symlinks in ~/service/ will get it
 Finally, a hint of Ruby!  
 This script includes a check to see if rvm is installed and if so uses its 1.9.2 version.  
 The -e to `chpst` specifies an environment directory, which is a way to set environment variables, but `chpst` can do much more.
+
+##### What's with all the dots?
+
+> The log:............ is a construct runsvdir uses to log to proctitle (seen in ps aux).  Each dot represents 15 seconds of time, with any stderr/out being flushed to proctitle for each dot.  
+> Thus if you saw
+
+        root      4001  0.0  0.0    184    28 ?        Ss   08:00   0:00 runsvdir -P /service log: ed with loglevel notice?Could not load host key: /etc/ssh/ssh_host_ecdsa_key??...
+
+You'd know sshd had a problem, but it hasn't had that problem in 45 seconds.
 
 ### Standalone environments 
 
