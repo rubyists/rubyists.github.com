@@ -312,22 +312,22 @@ Because POST has varied on the systems, the initial boot times and reboot times 
       <td>Default SysV Init</td>
       <td>22.13</td>
       <td>29.41</td>
-      <td>19.94</td>
       <td>24.83</td>
+      <td>19.94</td>
     </tr>
     <tr>
       <td>SystemD</td>
       <td>15.11</td>
       <td>21.53</td>
-      <td>14.62</td>
       <td>16.96</td>
+      <td>14.62</td>
     </tr>
     <tr>
       <td>Runit</td>
       <td>11.94</td>
       <td>17.67</td>
-      <td>11.28</td>
       <td>12.45</td>
+      <td>11.28</td>
     </tr>
   </tbody>
 </table>
