@@ -17,7 +17,7 @@ Some things we especially like about this system are:
 
 Runit offers a concise but complete view of process status, including the optional log service. 
 
-        bougyman@jimmy:~$ sudo sv s /service/\*
+        bougyman@jimmy:~$ sudo sv s /service/*
         run: /service/callcenter: (pid 2870) 5266009s
         run: /service/cron: (pid 3769) 7700115s
         run: /service/fxc: (pid 3714) 7700118s
