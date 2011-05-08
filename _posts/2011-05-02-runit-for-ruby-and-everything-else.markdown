@@ -202,6 +202,15 @@ Finally, a hint of Ruby!
 This script includes a check to see if rvm is installed and if so uses its 1.9.2 version.  
 The -e to `chpst` specifies an environment directory, which is a way to set environment variables, but `chpst` can do much more.
 
+##### What's with all the dots?
+
+> The log:............ is a construct runsvdir uses to log to proctitle (seen in ps aux).  Each dot represents 15 seconds of time, with any stderr/out being flushed to proctitle for each dot.  
+> Thus if you saw
+
+        root      4001  0.0  0.0    184    28 ?        Ss   08:00   0:00 runsvdir -P /service log: ed with loglevel notice?Could not load host key: /etc/ssh/ssh_host_ecdsa_key??...
+
+You'd know sshd had a problem, but it hasn't had that problem in 45 seconds.
+
 ### Standalone environments 
 
 [chpst](http://smarden.org/runit/chpst.8.html) allows multiple controls around processes we run, including memory capping,
@@ -229,9 +238,101 @@ See the Tiny Call Center [default envdir](https://github.com/rubyists/tiny_call_
 
 ### Parallel startup
 
-For services which have no dependencies, they all start concurrently,
-drasticly reducing time spent changing runlevels (including the initial
-boot).
+Services all start concurrently, drasticly reducing time spent changing runlevels (including the initial boot).
+
+#### How Fast (Benchmarks!)
+
+The only fair benchmark available for runlevel switching, because of the differences in what arbitrary runlevels mean in various systems, was initial boot time.  
+The results of the initial boot time are of course influenced by POST time, which is listed for each of the below reference systems.  Each of these systems is a default Arch Linux install with the Arch Linux default (sysvinit), runit-run-git, or initscripts-systemd installed, running getty's, a syslogger, ssh, and cron (no X).  
+Because POST has varied on the systems, the initial boot times and reboot times are an average of 10 runs of each action.  A system is considered 'booted' when a user is able to log in to a getty.
+
+##### Acer 1830t Small Form Factor Notebook
+
+    680U i7 1.47Ghz processor
+    4G Ram
+    640G 7200RPM Sata HD
+    Intel Graphics on board
+    Post time 5-7 seconds.
+    
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Initial Boot Time</th>
+      <th>Reboot (init 6/shutdown -r now) Time</th>
+      <th>Max Boot Time</th>
+      <th>Min Boot Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Default SysV Init</td>
+      <td>28.73</td>
+      <td>39.41</td>
+      <td>33.48</td>
+      <td>27.10</td>
+    </tr>
+    <tr>
+      <td>SystemD</td>
+      <td>19.21</td>
+      <td>26.77</td>
+      <td>22.41</td>
+      <td>18.07</td>
+    </tr>
+    <tr>
+      <td>Runit</td>
+      <td>17.25</td>
+      <td>24.47</td>
+      <td>18.22</td>
+      <td>16.33</td>
+    </tr>
+  </tbody>
+</table>
+
+##### Toshiba Qosmio Portable Workstation
+
+    740QM i7 processor
+    8G Ram
+    Corsair Performance III SSD
+    Nvidia GTX460m 1.5G Discreet Graphics
+    Post time 2-4 seconds.
+    
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Initial Boot Time</th>
+      <th>Reboot (init 6/shutdown -r now) Time</th>
+      <th>Max Boot Time</th>
+      <th>Min Boot Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Default SysV Init</td>
+      <td>22.13</td>
+      <td>29.41</td>
+      <td>19.94</td>
+      <td>24.83</td>
+    </tr>
+    <tr>
+      <td>SystemD</td>
+      <td>15.11</td>
+      <td>21.53</td>
+      <td>14.62</td>
+      <td>16.96</td>
+    </tr>
+    <tr>
+      <td>Runit</td>
+      <td>11.94</td>
+      <td>17.67</td>
+      <td>11.28</td>
+      <td>12.45</td>
+    </tr>
+  </tbody>
+</table>
+
+The main time difference we saw in the SystemD startup was the 2-3 seconds dbus itself takes to start, giving runit its advantage.  If you started dbus in runit stage 1 we expect these times would be nearly identical.
 
 ### Infinite runlevels
 
