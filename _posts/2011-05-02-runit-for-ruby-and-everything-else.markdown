@@ -181,7 +181,7 @@ This gives non-root users the same ability to guarantee services are running, su
         exec 2>&1 \
           sudo -H -u callcenter runsvdir -P /home/callcenter/service 'log:.........................................................................................................'
 
-Now any service directory the callcenter user symlinks in ~/service/ will get its own `runsv` process, running as callcenter.
+Now any service directory the callcenter user symlinks in ~/service/ will get its own `runsv` process, running as callcenter.  _None_ of the callcenter user's processes will be started (because `runsvdir` will not run) until postgresql, couchdb, and memcached are up and running successfully.
 
 `/home/callcenter/service/fs2ws/run`:
 
