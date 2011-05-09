@@ -9,7 +9,7 @@ It can be used as a sysvinit replacement or run side-by-side with many init syst
 
 We began using runit as a replacement for daemontools in November 2001, because runit was OSI licensed at the time (daemontools was not) and for the extensive documentation offerred for runit utilities (including manpages).
 
-Fully implmenting runit, as a replacement for init/PID 1 or as a standalone supervisor, is covered in general at the runit page above and in detail for [Arch Linux](https://wiki.archlinux.org/index.php/Runit).
+Fully implementing runit, as a replacement for init/PID 1 or as a standalone supervisor, is covered in general at the runit page above and in detail for [Arch Linux](https://wiki.archlinux.org/index.php/Runit).
 
 Some things we especially like about this system are:
 
@@ -357,4 +357,3 @@ Processes run in the foreground logging to stdout/stderr.
 This requirement for well-behaved processes can be a blessing but some may see it as a curse.  
 Processes that are not well behaved can be supported through a `once` service, if you absolutely cannot do without them.  
 We use this as a bit of a litmus test for potential new services.  When they can not run in a well-behaved manner that's a high-priority Con, one which takes extraordinary Pros or absolutely necessary business-case to overcome.
-
