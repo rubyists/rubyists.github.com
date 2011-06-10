@@ -20,7 +20,7 @@ Radeon) more valuable for rigging than a Ryan.
    
    Important factors in choosing a Radeon include mhash/s, mhash/$, and mhash/J(oule). This is going to be the majority
    of your purchase price in most miners, so don't scrimp.  If you can find a 5830 these are said to be the cheapest
-   mhash/$, but the 6870 (Asus brand has been our best) is easy to find and will do ~300mhash and can be cound for ~$200.  
+   mhash/$, but the 6870 (Asus brand has been our best) is easy to find and will do ~300mhash and can be found for ~$200.  
    Such a card can pay for itself mining 24/7 for about 4-6 days.  You can find the gems/gold (5870/5970/6990) from time
    to time in small stores (Altex in Texas had a few in each store), grab them when you can.
 
