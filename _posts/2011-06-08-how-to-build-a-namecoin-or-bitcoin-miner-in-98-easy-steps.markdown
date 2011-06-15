@@ -310,11 +310,145 @@ or replaces the [Official Arch Linux Install Guide](https://wiki.archlinux.org/i
 
     Before it will allow you to use it
 
-        pacman -S rsync git openssh yajl
+        pacman -S rsync git openssh yajl sudo tmux
 
     Once this installs, you can start openssh with /etc/rc.d/sshd start and log in remotely to continue the steps, if you prefer.
+
+35. Configure Sudo
+
+    If you don't know how to use vi
+
+        EDITOR=nano visudo
+
+    Otherwise, just visudo.  Uncomment (take the # out from in front of) the line that reads
+
+        # %wheel ALL=(ALL) ALL
+
+    So it should now be
+
+        %wheel ALL=(ALL) ALL
+
+34. Change to your regular user and install Yaourt.
+
+    If you're going over ssh, ssh to the new miner as your normal user, not root.  If you're local, logout as root and back in as the normal
+    user (with wheel privileges) you created earlier.
 
         cd /tmp/
         wget http://aur.archlinux.org/packages/package-query/package-query.tar.gz
         wget http://aur.archlinux.org/packages/yaourt/yaourt.tar.gz
+        tar zxvf package-query.tar.gz
+        cd package-query
+        makepkg -si (say Yes to all the prompts about installing, then watch the scroll WHEE).
+        cd ..
+        tar zxvf yaourt.tar.gz
+        cd yaourt
+        makepkg -si
+
+35. Install the ATI Drivers
+
+    All of these commands are to be done as your regular user, as well.  Each will ask to install a lot of dependencies then prompt you to build, then
+    to install.  Say Y/yes to the questions about installing and watch the scroll while it downloads and builds the packages.  Say N/no to the 'edit the PKGBUILD' 
+    and 'edit the .install' questions.  Any time yaourt asks for a password it expects the password of the regular user you created, not root's password.
+
+        yaourt -S catalyst-utils
+        yaourt -S kernel26-headers catalyst-hook
+        yaourt -S amdstream
+
+    Amdstream will take quite a while, maybe grab a smoke or eat some twizzlers here.
+
+36. Install X.
+
+        yaourt -S xorg-server xorg-apps xorg-appres xorg-xinit xautolock xlockmore xorg-fonts xorg-xhost xorg-xauth ratpoison xterm
+
+    Choose the default (all) when it asks about xorg-xfonts, the proceed with the installation.
+
+37. Create a .Xauthority
+
+    Put the following in a script (i name it newkey.sh and put it in ~/bin)
+      
+        mkdir ~/bin
+        vim ~/bin/newkey.sh
+
+    Here's the contents of that file
+
+        #!/bin/sh
+        # create new .Xauthority file
+        # try some security
+        auth=$HOME/.Xauthority
+        cp /dev/null $auth
+        # generate a nice long random key
+        if [ "$1" = "-md5" ]; then
+          # use a random noise source and get a strong checksum of it.
+          # this is probably a stronger random number than the other method.
+          key=`pstat -pfS | md5`
+        else
+          # quick and dirty.  can probably be recreated if time can be guessed.
+        #  key=`perl -e 'srand; printf int(rand(100000000000000000))'`
+          key=`perl -e 'srand; printf int(rand(10000000000000))'`
+          # use $key$key to make sure even length.
+          key=$key$key
+        fi
+        # add to auth file. 
+        xauth add unix:0 . $key
+        # was xauth add ${HOST}/unix:0 . $key
+        xauth add ${HOST}:0 . $key
+
+    Once you have this created, issue the following
+        
+        chmod 755 ~/bin/newkey.sh
+        ~/bin/newkey.sh
+
+38. Configure X
+
+    First find out where your cards are.
+
+        lspci|grep VGA
+
+    Make a note of that first number.  In the following I have three
+
+        04:00.0 VGA compatible controller: ATI Technologies Inc Cayman PRO [AMD Radeon 6900 Series]
+        05:00.0 VGA compatible controller: ATI Technologies Inc Cayman PRO [AMD Radeon 6900 Series]
+        0a:00.0 VGA compatible controller: ATI Technologies Inc Cayman PRO [AMD Radeon 6900 Series]
+
+    The number you want is the PCI Bus ID.  Here it's 4, 5, and 10 (0a in hex is 10 to us humans)
+
+    Now use the aticonfig tool to create a basic configuration which we'll modify.
+
+        sudo aticonfig --initial=dual-head
+
+    We have to edit what it created, use an editor to open /etc/X11/xorg.conf
+
+    Find each section like
+
+        Section "Device"
+          Identifier  "aticonfig-Device[0]-0"
+          Driver      "fglrx"
+          BusID       "PCI:4:0:0"
+        EndSection
+
+    Set that BusID to be the number you saw in lspci, there should be one Device section for each card. (Device[0], Device[1], etc)
+    Save the file.
+
+39. Make an .xinitrc and start x
+
+    Let's make sure it will run, first we create a simple xinitrc.
+
+        cat 'setxkbmap -option terminate:ctrl_alt_bksp
+        xautolock -corners +-+- -locker "xlock -mode blank" &
+        xterm &
+        exec ratpoison' > .xinitrc
+
+    And then start it 
+
+        xinit -- -auth ~/.Xauthority
+
+    To stop, hit ctrl-alt-bksp (backspace).
+
+40. Install poclbm and start mining.
+
+    We're using poclbm because it's given us the least hassle and good numbers.  Your mileage may vary.
+
+        yaourt -S python2 poclbm-git
+
+        poclbm 
 
