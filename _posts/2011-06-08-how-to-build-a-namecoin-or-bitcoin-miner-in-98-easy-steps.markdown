@@ -82,9 +82,11 @@ someone has to build it, here's how to do it yourself.  Grab scissors or a box k
    Most cases of this class are fairly tool-less here.  You may need to put some doo-dads on the side of the drive and slide it in or (in the DF-85)
    just find out how to open the front panel and slide it in.
 
-9. Put the motherboard backplane in the case.
+9. Put the motherboard faceplate in the case.
   
-   If you forget this step you will really be hating yourself later.  It takes 4 seconds but it's important enough to make its' own step.
+   If you forget this step you will really be hating yourself later.  It takes 4 seconds but it's important enough to make its' own step.  It's the
+   metal rectangle with all the holes for the PS2, USB, network, and other connections are.  Just snap it into the case, removing the one
+   that came with the case first, if there is one.
 
 10. Put the Processor and Ram in the Motherboard
 
@@ -132,7 +134,7 @@ someone has to build it, here's how to do it yourself.  Grab scissors or a box k
 
 16. Tidy and close it up.
   
-    Take any cable ties the hardware came with and make sure you keep all the cables away from the airflow.  Behing the motherboard is always best, but some will
+    Take any cable ties the hardware came with and make sure you keep all the cables away from the airflow.  Behind the motherboard is always best, but some will
     have to be exposed, just tie them out of the way.  Now put the case side panels back on.
 
 ##  Part 3 (Steps 17-29) Install the Operating System.
