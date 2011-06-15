@@ -135,5 +135,184 @@ someone has to build it, here's how to do it yourself.  Grab scissors or a box k
     Take any cable ties the hardware came with and make sure you keep all the cables away from the airflow.  Behing the motherboard is always best, but some will
     have to be exposed, just tie them out of the way.  Now put the case side panels back on.
 
-##  Part 3 (Steps 17-51) Install the Miner Software.
+##  Part 3 (Steps 17-29) Install the Operating System.
      
+This is a step-by-step of how we build archlinux manually.  A build could be scripted with the aif arch install framework, as well.  This in no way supercedes
+or replaces the [Official Arch Linux Install Guide](https://wiki.archlinux.org/index.php/Official_Arch_Linux_Install_Guide) nor the 
+[Beginner's Guide](https://wiki.archlinux.org/index.php/Beginners%27_Guide).  Please refer to those documents for build setups outside the scope of this simple miner.
+
+17. Download Arch Linux
+
+    Download 2010.05 from the [Arch Linux Download Site](http://www.archlinux.org/download) and follow the instructions to burn it to a cheap USB stick.  You
+    can get 32 bit or 64, we're using the 64bit version, instructions should be the same.
+
+18. Boot Arch Linux
+
+    Put the USB stick you wrote the archlinux installer on in a USB slot, power on the computer, and watch for the 'Hit _ For the Boot Menu', where _ is some
+    key which lets you modify the device to boot from.  Choose your USB stick and continue booting.  When you get to the screen that says "Arch Linux Live ISO",
+    you're there.
+
+19. Log In and Get it on the network.
+
+    Log in with 'root', it will have no password.  For a simple wired connection, this can be done with 
+    
+        dhcpcd eth0
+
+    If you have a wireless network,
+
+        /arch/setup
+
+        Now choose 1) Select Source
+        Then 2) net NET (FTP/HTTP)
+        Hit <OK> when it talks about loading modules
+        Now 1) Setup Network
+        Choose your Wireless Card (probably wlan0)
+        Fill in your wireless network information.
+        Say <Yes> to "Do you want to use DHCP?"
+
+    You should see "The network is configured."
+
+    If you have another machine on that network and want to use it for the install, you can exit the installer now and complete step 20.
+
+        Hit <OK>
+        Then 3) Return to Main Menu
+        Then 8) Exit install
+
+    Otherwise skip to Step 21.
+
+20. Start SSHD And Log In
+
+    Installing via ssh over the network has many advantages, the primary one being you can look at this guide split screen and copy/paste to the ssh
+    session.  To start ssh
+
+        /etc/rc.d/sshd start
+        echo "sshd : ALL : allow" >> /etc/hosts.allow
+        passwd
+        (set a password)
+
+    Now ssh from your regular computer to the IP of the new miner.  You can find its current IP with
+
+        ip a l
+
+21. Start (or continue) the Arch Linux Installer
+
+    You should be at the Main Menu of the arch linux installer.  If you ssh'd in, this can be started with
+
+        /arch/setup
+
+        Choose 1) Select Source
+        Choose net NET
+        hit <OK>
+
+22. Choose a Mirror
+    
+    Choose a mirror which is close to you geographically, if possible.  Don't use a throttled one. http://mirror.rit.edu is good in the U.S.
+    Now "Return to the Main Menu"
+
+23. Set Clock
+
+    Select your region and timezone, then set time and date.  Always choose UTC for the Clock Configuration.  If the time is off after you select UTC,
+    choose the ntp option to set the time and date using ntp.  Return to the Main Menu
+
+24. Prepare Hard Drive
+
+    You got the cheapest POS hard drive you could find, right?  Just choose 1) Auto-Prepare, choose the hard drive (usually /dev/sda),  and let it
+    use all the defaults it presents you for partition sizes.  When it asks for Filesystem selection, we use ext4 but you're free to use any you like.
+    Let it COMPLETELY ERASE! the drive you chose.  You are absolutely sure.  If for some reason this fails you can manually partition or choose the
+    individual block devices yourself.  You only need / and Swap.  Back to the Main Menu when it says "Paritions successfully created"
+
+25. Select Packages
+
+    Choose both base and base-devel, then when the big screen with all the packages comes up find 'netcfg' and choose it, then hit <OK>
+
+26. Install Packages
+
+    Hit <OK> and this runs on its own.  Watch and wait til it's complete.
+
+27. Configure System
+
+    Choose this, say Yes to using network settings from the installer in rc.conf and resolv.conf, then choose an editor.  If you don't know any of them,
+    choose nano.
+
+        /etc/rc.conf: Change the HOSTNAME to something you wish to name this.  
+        Now find the line that says #NETWORKS=(main) and remove the # from the beginning of that line
+        change DAEMONS=, replacing 'network' with 'net-profiles' and adding 'sshd' (no quotes on any of them)
+        Save the file
+
+        Skip /etc/fstab and /etc/mkinitcpio.conf
+        /etc/modprobe.d/modprobe.conf: add a line that reads 'blacklist radeon' (without the quotes).  Save the file
+
+        Skip til /etc/hosts.allow: add 'sshd : ALL : allow' to it and save it.
+
+        Skip to Root-Password and set one.  Make sure you get it right, it won't give you much warning if you get it wrong.
+        Choose Done, it will do a little scroll dance after a few seconds then return to the main menu.
+
+28. Install Bootloader
+
+    Choose Grub, then hit <OK> to open an editor for the grub configuration file.  Find the first line that says kernel /vmlinuz26 root=... and add
+    'nomodeset' to the end of it (no quotes).  Save the file, then choose the correct device to install the bootloader on, likely /dev/sda.  You should
+    see "GRUB was successfully installed".
+
+29. Exit install and reboot.
+
+    Once you exit the installer, type reboot -f and hit enter to reboot.
+
+## Part 4 (steps 30-61) Install the miner software.
+
+30. Boot the new Arch Linux and Log In.
+ 
+    It should boot on its own, all the way to a log in prompt.  Log in as root with the password you set in the "Configure System" step.
+
+31. Set up the network.
+
+        cd /etc/network.d
+        cp examples/ethernet-dhcp ./main
+        netcfg main
+
+    If you aren't using ethernet-dhcp, or have to choose a different interface from eth0, you can edit the file and change any parameters you need.
+    In /etc/network.d/examples are other types of connectioned clearly named.  Copy any one of them you need to /etc/network.d as 'main' and edit
+    to taste, if the above did not work for your connection.
+
+32. Create a normal user account
+
+    This is the user that will run the mining and you can also use it to administrate the system.  If you want separate admin account from the miner
+    account you can create as many as you like here.
+
+        useradd miner
+
+    Follow the prompts, accepting defaults if you don't want admin privileges for the user, adding the group 'wheel' (no quotes) as an 
+    Additional group when prompted for Additional groups.  
+
+        New account will be created as follows:
+
+        ---------------------------------------
+        Login name.......:  miner
+        UID..............:  [ Next available ]
+        Initial group....:  users
+        Additional groups:  wheel
+        Home directory...:  /home/miner
+        Shell............:  /bin/bash
+        Expiry date......:  [ Never ]
+
+    If yours looks like that, hit ENTER to create the account.  You will have to set a password, you don't have to fill in the other information, 
+    you can just enter through it all, leaving them blank.
+
+33. Install some software
+
+        pacman -Syu
+
+    This will make sure everything on your system is current.  Pay attention to anything it tells you to do while it's upgrading.  You will likely
+    have to 
+        
+        pacman-db-upgrade
+
+    Before it will allow you to use it
+
+        pacman -S rsync git openssh yajl
+
+    Once this installs, you can start openssh with /etc/rc.d/sshd start and log in remotely to continue the steps, if you prefer.
+
+        cd /tmp/
+        wget http://aur.archlinux.org/packages/package-query/package-query.tar.gz
+        wget http://aur.archlinux.org/packages/yaourt/yaourt.tar.gz
+
