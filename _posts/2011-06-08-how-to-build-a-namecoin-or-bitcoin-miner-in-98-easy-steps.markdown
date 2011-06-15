@@ -225,11 +225,11 @@ or replaces the [Official Arch Linux Install Guide](https://wiki.archlinux.org/i
 
 25. Select Packages
 
-    Choose both base and base-devel, then when the big screen with all the packages comes up find 'netcfg' and choose it, then hit <OK>
+    Choose both base and base-devel, then when the big screen with all the packages comes up find 'netcfg' and choose it, then hit OK
 
 26. Install Packages
 
-    Hit <OK> and this runs on its own.  Watch and wait til it's complete.
+    Hit OK and this runs on its own.  Watch and wait til it's complete.
 
 27. Configure System
 
@@ -251,7 +251,7 @@ or replaces the [Official Arch Linux Install Guide](https://wiki.archlinux.org/i
 
 28. Install Bootloader
 
-    Choose Grub, then hit <OK> to open an editor for the grub configuration file.  Find the first line that says kernel /vmlinuz26 root=... and add
+    Choose Grub, then hit OK to open an editor for the grub configuration file.  Find the first line that says kernel /vmlinuz26 root=... and add
     'nomodeset' to the end of it (no quotes).  Save the file, then choose the correct device to install the bootloader on, likely /dev/sda.  You should
     see "GRUB was successfully installed".
 
